@@ -6,3 +6,7 @@ def_file = path+'/isoprene_full_v5.def'
 equations = read_eqns(eqn_file)
 species = read_spc(spc_file)
 inits = read_def(def_file)
+
+from calculations import calculate_weight
+eqn = equations[0]
+calculate_weight(eqn, inits)
