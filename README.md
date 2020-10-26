@@ -3,6 +3,7 @@
 - **main.py**
 - **isoprene_rates.py** - functions used to calculate weights
   - TUN, ALK, NIT
+  - Other supplemental math functions
 - **read_input.py**   - read in spc, def, eqn files
   - read_spc(file)
   - read_eqn(file)
