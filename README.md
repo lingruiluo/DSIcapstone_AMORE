@@ -13,6 +13,9 @@
   - read_def(file)
 - **calculations.py** 
   - calculate_weight(eqn, init_values): return weight dict  
+  - **TODO: calculate_all_weights(eqns, init_values): return a weight dict**
+  - **TODO: calculate_r**
+  - **TODO: calculate_all_r: return a r_ab dict**
 - **directed_graph.py**  
   - TODO
 - **requirements.txt**
@@ -21,7 +24,7 @@
 **TODO:**  
 *calculations.py*  
 Direct influence - a normalized contribution of species B to the production rate of species A, rAB, if the normalized contribution r_AB is sufficiently large, species A strongly depends on species B.  
-arguments might need to be changed in this function, because we have the a weight_dict from calculate_weight function
+arguments might need to be changed in this function, because we have the a weight_dict from calculate_weight function  
 Define calculate_r(v_a vector, w vector, d_b vector):  
 
 CLASS 2 - *directed_graph.py*  
