@@ -1,0 +1,153 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-Oblique;
+}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 \ul \ulc0 README_v5_190415\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 \ulnone \
+Please see the KPP User Manual for more information on running the mechanism (http://people.cs.vt.edu/~asandu/Software/Kpp/Download/kpp-2.1_UsersManual.pdf)\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ul \
+VERSION HISTORY:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ulnone \
+v5: \
+(a) the Reduced-plus mechanism has been made available in a format compatible with the F0AM model (https://sites.google.com/site/wolfegm/models), contained in the folder "F0AM_isoprene_reduced_plus"\
+(b) New mechanism: "MINI" is the smallest mechanism included here, and represents a simplified form of the "reduced-plus" mechanism. The "reduced-plus" mechanism was incorporated into GEOS-Chem and the results were used to lump and remove any species made in < 0.1% overall yield from isoprene globally and < 1% overall yield from isoprene locally in three regions (the Amazon, Southeast United States, and Eastern China). For more details, see Bates & Jacob 2019. \
+(c) isoprene hydroxynitrate and hydroperoxynitrate photolysis has been introduced (as in MCM v3.3.1) to the reduced, reduced-plus, and mini mechanisms.\
+(d) a typo in the IHPOO2 H-shift rate that made the rate too small has been revised\
+\
+v4.3: New isomerization rates added to all three .eqn files as shown in M\'f8ller et al., J. Phys. Chem. A, 123 (4) p 920-932, 2019, DOI: 10.1021/acs.jpca.8b10432. (2/7/19)\
+\
+v4.2: HPALD1 + OH reaction products revised (there was an erroneous CO2 instead of CO) in isoprene_full\
+\
+v4.1: HMML decomp reaction removed, HMML + OH added in isoprene_reduced_plus\
+\
+v4: Final updates before publication - slight modifications to many reaction pathways (30/1/18)\
+\
+v3: Updated HPALD + OH and ICN + OH chemistry per reviewers\'92 comments (13/11/17)\
+\
+v2: Introduction of \'93reduced\'94 and \'93reduced-plus\'94 mechanisms (16/10/17)\
+\
+v1: First full mechanism (20/7/17)\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ul CITATION:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ulnone As of v5, the primary manuscript describing the Full, Reduced, and Reduced-Plus mechanisms is published. With the use of this model, please cite Wennberg et al. 2018. The Mini mechanism was further developed in Bates & Jacob 2019, currently in review.\
+\
+Wennberg, P. O., et al. "The gas-phase reactions of isoprene and its major oxidation products. 
+\f2\i Chemical Reviews,
+\f1\i0  
+\f0\b 2018,
+\f1\b0  118 (7), 3337-3390. DOI: 10.1021/acs.chemrev.7b00439. \
+\
+Bates, K. H. and Jacob, D. J. "Implementation of a new isoprene oxidation mechanism and its effects on oxidants, volatile products, and secondary organic aerosol precursors". 
+\f2\i Atmos. Chem. Phys. Discuss., 
+\f0\i0\b 2019
+\f1\b0 , in review. DOI: 10.5194/acp-2019-328.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ul FILES INCLUDED:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f2\i \cf0 \ulnone \
+README_v5: 
+\f1\i0 This file!
+\f2\i \
+\
+isoprene_full_v5.def
+\f1\i0 : KPP definition file for the full/explicit isoprene mechanism with editable input parameters, including the preferred language and driver, initial values of included species, temperature, start and end times, and time steps.\
+
+\f2\i \
+isoprene_full_v5.spc:
+\f1\i0  KPP file containing a list of all 385 species in the full mechanism; species can be defined as \'93variable\'94 (under #DEFVAR) or \'93fixed\'94 (under #DEFFIX), and moved between the two categories as preferred for each simulation.\
+
+\f2\i \
+isoprene_full_v5.eqn: 
+\f1\i0 KPP file containing a list of all 810 reactions in the full mechanism.
+\f2\i \
+isoprene_reduced_v4.def: 
+\f1\i0 KPP definition file for the reduced isoprene mechanism with editable input parameters, including the preferred language and driver, initial values of included species, temperature, start and end times, and time steps.
+\f2\i \
+\
+isoprene_reduced_v5.spc: 
+\f1\i0 KPP file containing a list of all 129 species in the reduced mechanism; species can be defined as \'93variable\'94 (under #DEFVAR) or \'93fixed\'94 (under #DEFFIX), and moved between the two categories as preferred for each simulation.
+\f2\i \
+\
+isoprene_reduced_v5.eqn: 
+\f1\i0 KPP file containing a list of all 210 reactions in the reduced mechanism.
+\f2\i \
+\
+isoprene_reduced_plus_v5.def: 
+\f1\i0 KPP definition file for the reduced-plus isoprene mechanism (the reduced mechanism with additional reactions, either extrapolated or drawn from MCM v3.3 and the literature, to continue oxidizing all species to CO2) with editable input parameters, including the preferred language and driver, initial values of included species, temperature, start and end times, and time steps.
+\f2\i \
+\
+isoprene_reduced_plus_v5.spc: 
+\f1\i0 KPP file containing a list of all 149 species in the reduced-plus mechanism; species can be defined as \'93variable\'94 (under #DEFVAR) or \'93fixed\'94 (under #DEFFIX), and moved between the two categories as preferred for each simulation.
+\f2\i \
+\
+isoprene_reduced_plus_v5.eqn: 
+\f1\i0 KPP file containing a list of all 369 reactions in the reduced-plus mechanism.
+\f2\i \
+\
+isoprene_mini_v5.def: 
+\f1\i0 KPP definition file for the mini isoprene mechanism with editable input parameters, including the preferred language and driver, initial values of included species, temperature, start and end times, and time steps.
+\f2\i \
+\
+isoprene_mini_v5.spc: 
+\f1\i0 KPP file containing a list of all 112 species in the mini mechanism; species can be defined as \'93variable\'94 (under #DEFVAR) or \'93fixed\'94 (under #DEFFIX), and moved between the two categories as preferred for each simulation.
+\f2\i \
+\
+isoprene_mini_v5.eqn: 
+\f1\i0 KPP file containing a list of all 291 reactions in the mini mechanism.
+\f2\i \
+\
+isoprene_rates_v5: 
+\f1\i0 Text file containing rate law formulas used in all three isoprene mechanisms, to be incorporated into the KPP \'93UserRateLaws\'94 files (in f90 format).\
+\
+
+\f2\i F0AM_isop_reactions.m
+\f1\i0 : the main Matlab chemistry file for implementing the reduced-plus mechanism in the F0AM model, containing the species and reactions.\
+\
+
+\f2\i F0AM_isop_K.m
+\f1\i0 : a Matlab file containing complex rate formulas used in F0AM_isop_reactions.m \
+\
+
+\f2\i F0AM_isop_J.m
+\f1\i0 : a Matlab file containing photolysis rate formulas used in F0AM_isop_reactions.m \
+\
+
+\f2\i F0AM_isop_ALK.m, F0AM_isop_EPO.m, F0AM_isop_NIT.m, F0AM_isop_TROE.m, F0AM_isop_TUN.m
+\f1\i0 : Matlab functions for calculating various rate coefficients used in F0AM_isop_reactions.m\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ul NAMING SCHEME:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ulnone \
+The ".spc" files give the names of the species in the mechanism according to our naming convention. Names of most species are based on stable precursor names (ISOP for isoprene, MVK for methyl vinyl ketone, MACR for methacrolein, etc.) that have the same carbon structure. Attached to the precursor name are any additional functional groups, each functional group immediately preceded by the carbon number that the functional group is attached to, in order of ascending location (i.e. functional groups attached to C1 precede functional groups attached to C2). Carbon numbers are those assigned to the parent compound (isoprene, MVK, or MACR; see Figures in "The gas-phase reactions of isoprene and its major oxidation products"). E or Z or c (
+\f2\i cis
+\f1\i0 ) or t (
+\f2\i trans
+\f1\i0 ) are attached to the end of the name when appropriate to designate stereoisomers. A Stabilized Criegee Intermediate (SCI) is designated by "ci" before the precursor name and \'93OO\'94 following. An energetically hot radical is designated by a lowercase "x" at the end of the name, and an alkyl radical is denoted by an "R" at the radical position. Any functional groups included within the precursor molecule (e.g., ISOP) are not included within the name. Abbreviations for different functional groups are listed here:\
+\
+carbonyl: CO\
+nitrate: N\
+hydroxy: OH\
+hydroperoxy: OOH\
+epoxide: ##O, where ## are the two carbon numbers the epoxide is attached to\
+alkyl radical: R\
+alkoxy radical: O\
+peroxy radical: OO\
+double bond: ##, where ## are the two carbon numbers the double bond is attached to\
+\
+Abbreviations for common species that do not follow this naming convention (such as GLYX for glyoxal) are clarified in the ".spc" files. In the reduced mechanisms, some species represent many isomers, in which case the naming scheme cannot be applied; in these cases the ".spc" files describe how isomers are combined and what the named species represents.\
+\
+As an example of the naming scheme, an isoprene hydroxyhydroperoxide with the peroxide group attached to C3 and the alcohol group attached to C4 would be named ISOP3OOH4OH. The double bond is not included in the name because this double bond is present in isoprene (the precursor molecule). }
