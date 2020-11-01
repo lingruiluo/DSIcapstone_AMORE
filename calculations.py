@@ -1,15 +1,33 @@
 def calculate_weight(eqn, inits):
+    '''Calculate weights for a given equation
+    Parameters
+    ----------
+    eql: tuple
+        The first element of the tuple is an equation. The second element is reaction rate.
+    inits: dict
+        A dictionary storing some initial values
+    
+    Returns
+    ----------
+    weight_dict: dict
+        A dictionary storing the weights
+    '''
+    
+    # import files
     import numpy as np
-    from isoprene_rates import EXP, LOG10, TUN, ALK, NIT
+    from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
     from read_input import background_spc
     import re
     from collections import defaultdict
+    
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
     initial_values_dict, TEMP = inits
     CFACTOR = float(initial_values_dict['CFACTOR'])
     reaction, k = eqn
-    reactants = reaction.split(' = ')[0].split(' + ') # get reactants 
+    reactants = reaction.split(' = ')[0].split(' + ') # get reactants
+    reactants = [i.strip() for i in reactants] 
     products = reaction.split(' = ')[1].split(' + ') # get products
+    products = [i.strip() for i in products]
 
     # get reactants mole values
     reactants_mole = [float(i[:find_alpha_index(i)]) 
@@ -24,9 +42,15 @@ def calculate_weight(eqn, inits):
 
     # v = 1 # assume the stoichiometric coefficient is 1 (might need to fix)
     SUN = 1 # random initial value for sun; need to fix !
-    funs = ['TUN', 'ALK', 'NIT']
-    if any([k for i in funs if i in k]):
+    funs_temp_cf = ['ALK', 'NIT','TROE','FALL','EPO'] 
+    funs_temp = ['TUN','ISO1','ISO2']
+    funs_cf = ['KCO']
+    if any([k for i in funs_temp_cf if i in k]):
         k = k[:-1] + ', TEMP, CFACTOR)'
+    if any([k for i in funs_temp if i in k]):
+        k = k[:-1] + ', TEMP)'
+    if any([k for i in funs_cf if i in k]):
+        k = k[:-1] + ', CFACTOR)'
     k_val = round(eval(k), 4)
     ls_concentration = []
     for i in reactants:
