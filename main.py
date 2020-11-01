@@ -9,5 +9,5 @@ inits = read_def(def_file)
 
 from calculations import calculate_weight
 eqn = equations[0]
-weights = calculate_weight(eqn, inits)
+weights = calculate_weight(eqn, inits) # a weight_dict for a single equation
 print(weights)

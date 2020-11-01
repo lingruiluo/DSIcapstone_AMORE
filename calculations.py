@@ -3,6 +3,7 @@ def calculate_weight(eqn, inits):
     from isoprene_rates import EXP, LOG10, TUN, ALK, NIT
     from read_input import background_spc
     import re
+    from collections import defaultdict
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
     initial_values_dict, TEMP = inits
     CFACTOR = float(initial_values_dict['CFACTOR'])
@@ -34,11 +35,11 @@ def calculate_weight(eqn, inits):
         else:
             ls_concentration.append(initial_values_dict['ALL_SPEC'])
     # weight = v * k_val * np.prod(ls_concentration)
-    weight_dict = {} # key: (product, reactant); value: weight of edge
+    weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
     for product, mole in zip(products_spc,products_mole):
         weight = mole * k_val * np.prod(ls_concentration)
         for reactant in reactants_spc:
             if reactant not in background_spc and product not in background_spc:
-                weight_dict[(product,reactant)] = weight
+                weight_dict[product][reactant] = weight
     # return(weight)
     return weight_dict  
