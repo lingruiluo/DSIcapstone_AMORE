@@ -13,7 +13,7 @@ KPP_REAL FUNCTION TUN( A0,B0,C0 )
       TUN =  DBLE(A0) * EXP(-DBLE(B0)/TEMP) * EXP(DBLE(C0)/TEMP**3)
    END FUNCTION TUN
 '''
-def TUN(A0, B0, C0):
+def TUN(A0, B0, C0, TEMP):
     return(A0 * EXP(B0/TEMP) * EXP(C0/TEMP**3))
 
 
@@ -32,7 +32,7 @@ KPP_REAL FUNCTION ALK ( A0,B0,C0,n,X0,Y0)
       ALK = K4 * EXP(DBLE(B0)/TEMP) * K3
    END FUNCTION ALK
 '''
-def ALK(A0, B0, C0, n, X0, Y0):
+def ALK(A0, B0, C0, n, X0, Y0, TEMP, CFACTOR):
     K0 = 2.0E-22 * EXP(n)
     K1 = 4.3E-1 * (TEMP/298.0) ** (-8)
     K0 = K0 * CFACTOR
@@ -59,7 +59,7 @@ KPP_REAL FUNCTION NIT ( A0,B0,C0,n,X0,Y0)
       NIT = K4 * EXP(DBLE(B0)/TEMP) * K3
    END FUNCTION NIT
 '''
-def NIT(A0, B0, C0, n, X0, Y0):
+def NIT(A0, B0, C0, n, X0, Y0, TEMP, CFACTOR):
     K0 = 2.0E-22 * EXP(n)
     K1 = 4.3E-1 *(TEMP/298.0) ** (-8)
     K0 = K0 * CFACTOR
@@ -81,7 +81,7 @@ KPP_REAL FUNCTION ISO1( A0,B0,C0,D0,E0,F0,G0 )
       ISO1 =  DBLE(A0) * EXP(DBLE(B0)/TEMP) * (1.-K2)
    END FUNCTION ISO1 
 '''
-def ISO1(A0, B0, C0, D0, E0, F0, G0):
+def ISO1(A0, B0, C0, D0, E0, F0, G0, TEMP):
     K0 = D0 * EXP(E0/TEMP) * EXP(1.E8/TEMP**3)
     K1 = F0 * EXP(G0/TEMP)
     K2 = C0 * K0/(K0+K1)
@@ -99,7 +99,7 @@ KPP_REAL FUNCTION ISO2( A0,B0,C0,D0,E0,F0,G0 )
   ISO2 =  DBLE(A0) * EXP(DBLE(B0)/TEMP) * K2
 END FUNCTION ISO2   
 '''
-def ISO2(A0, B0, C0, D0, E0, F0, G0):
+def ISO2(A0, B0, C0, D0, E0, F0, G0, TEMP):
     K0 = D0 * EXP(E0/TEMP) * EXP(1.E8/TEMP**3)
     K1 = F0 * EXP(G0/TEMP)
     K2 = C0 * K0/(K0+K1)
@@ -115,7 +115,7 @@ KPP_REAL FUNCTION EPO(A1,E1,M1)
   EPO = DBLE(A1) * EXP(DBLE(E1)/TEMP) *  K1
 END FUNCTION EPO
 '''
-def EPO(A1, E1, M1):
+def EPO(A1, E1, M1, TEMP, CFACTOR):
     K1 = 1 / (M1 * CFACTOR + 1)
     EPO = A1 * EXP(E1/TEMP) * K1
     return EPO
@@ -127,7 +127,7 @@ KPP_REAL FUNCTION KCO(A1,M1)
   KCO = DBLE(A1) * (1.0_dp + (CFACTOR / DBLE(M1)))
 END FUNCTION KCO
 '''
-def KCO(A1, M1):
+def KCO(A1, M1, CFACTOR):
     KCO = A1 * (1 + (CFACTOR/M1))
     return KCO
 
@@ -146,7 +146,7 @@ END FUNCTION FALL
 '''
 
 
-def FALL(A0,B0,C0,A1,B1,C1,CF):
+def FALL(A0,B0,C0,A1,B1,C1,CF, TEMP, CFACTOR):
     K0 = A0 * EXP(B0/TEMP) * (TEMP/300)**C0
     K1 = A1 * EXP(B1/TEMP) * (TEMP/300)**(C1)
     K0 = K0*CFACTOR
@@ -168,7 +168,7 @@ KPP_REAL FUNCTION TROE ( A0,B0,C0,A1,B1,C1,CF)
   TROE = K0*K1*F/(K0+K1)
 END FUNCTION TROE
 '''
-def TROE(A0, B0, C0, A1, B1, C1, CF):
+def TROE(A0, B0, C0, A1, B1, C1, CF, TEMP, CFACTOR):
     K0 = A0 * EXP(B0/TEMP) * (TEMP/300) * C0
     K1 = A1 * EXP(B1/TEMP) * (TEMP/300) * C1
     K0 = K0 * CFACTOR
