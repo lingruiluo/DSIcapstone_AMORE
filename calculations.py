@@ -86,8 +86,8 @@ def calculate_allweight(eqns, inits):
     
     # import files
     import numpy as np
-#     from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
-#     from read_input import background_spc
+    from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
+    from read_input import background_spc
     import re
     from collections import defaultdict
     weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
