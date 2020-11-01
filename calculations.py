@@ -147,3 +147,35 @@ def calculate_allweight(eqns, inits):
                         weight_dict[product] = kk
         # return(weight)
     return weight_dict 
+
+
+"""
+species_a: product str
+species_b: reactant str
+weight_dict: a dictionary from calculate_allweight function
+"""
+def calculate_r(species_a, species_b, weight_dict):
+    if species_a not in weight_dict.keys():
+        return(species_a + ' is not in the weight dictionary.')
+    b_list = [reactant for idx, reactant in weight_dict[species_a].keys()]
+    if species_b not in b_list:
+        return('There is no reaction to produce ' + species_a + ' from ' + species_b + '.')
+    nominator = 0
+    denominator = 0
+    for idx, reactant in weight_dict[species_a].keys():
+        denominator += abs(weight_dict[species_a][(idx, reactant)][reactant])
+        if reactant == species_b:
+            nominator += abs(weight_dict[species_a][(idx, reactant)][reactant])
+    if denominator == 0:
+        return(0)
+    else:
+        return(nominator/denominator)
+    
+def calculate_all_r(weight_dict):
+    products_list = list(weight_dict.keys())
+    rAB_dict = defaultdict(dict)
+    for product in products_list:
+        reactant_unique_list = list(set([reactant for idx, reactant in weight_dict[product].keys()]))
+        for reactant in reactant_unique_list:
+            rAB_dict[product][reactant] = calculate_r(product, reactant, weight_dict)
+    return(rAB_dict)
