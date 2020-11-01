@@ -5,7 +5,7 @@
   - read in data
   - calculate weights
 - **isoprene_rates.py** - functions used to calculate weights
-  - TUN, ALK, NIT, ESO1, ESO2, TROE, FALL (adding more functions if necessary, see the rtf file)
+  - TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
   - Other supplemental math functions
 - **read_input.py**   - read in spc, def, eqn files
   - read_spc(file)
