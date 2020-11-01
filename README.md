@@ -17,7 +17,8 @@
   - **TODO: calculate_r**
   - **TODO: calculate_all_r: return a r_ab dict**
 - **directed_graph.py**  
-  - TODO
+  - **TODO: DFS
+  - **TODO: find_dependent_set
 - **requirements.txt**
   - pip install -r requirements.txt
 
