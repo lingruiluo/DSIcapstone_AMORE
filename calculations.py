@@ -1,9 +1,25 @@
 def calculate_weight(eqn, inits):
+    '''Calculate weights for a given equation
+    Parameters
+    ----------
+    eql: tuple
+        The first element of the tuple is an equation. The second element is reaction rate.
+    inits: dict
+        A dictionary storing some initial values
+    
+    Returns
+    ----------
+    weight_dict: dict
+        A dictionary storing the weights
+    '''
+    
+    # import files
     import numpy as np
-    from isoprene_rates import EXP, LOG10, TUN, ALK, NIT
+    from isoprene_rates import *
     from read_input import background_spc
     import re
     from collections import defaultdict
+    
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
     initial_values_dict, TEMP = inits
     CFACTOR = float(initial_values_dict['CFACTOR'])

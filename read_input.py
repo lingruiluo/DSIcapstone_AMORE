@@ -1,5 +1,6 @@
 # Clean up the data based on the formats of equations above
 
+# background species
 background_spc = ['CO2','CS2','CO','H2CO3','COS','M','O2','OH','HO2',
                   'NO','NO2','NO3','MO2','H2O','H2O2','H2Od','O3',
                   'SO2','H2S','HF','H2S','N2H4','HN3','HI','HBr',
@@ -10,6 +11,19 @@ background_spc = ['CO2','CS2','CO','H2CO3','COS','M','O2','OH','HO2',
     ]
 
 def read_eqns(eqn_file):
+    '''Read .eqn files
+    Parameters
+    ----------
+    eqn_file: .eqn file
+      The .eqn file to read
+
+    Returns
+    ----------
+    species: list
+      A list of tuples. The first element in the tuple is an equation.
+      The second element in the tuple is reaction rate. 
+    '''
+  
     equations = None
     with open(eqn_file,'r') as f:
         lines = f.readlines()
@@ -19,8 +33,18 @@ def read_eqns(eqn_file):
     equations = [(i[0].strip(),i[1].strip().strip(';')) for i in equations]
     return(equations)
 
-# Process the raw input into species
 def read_spc(spc_file):
+    '''Read .spc files and process the raw input into species
+    Parameters
+    ----------
+    spc_file: .eqn file
+        The .spc file to read
+    
+    Returns
+    ----------
+    species: list
+        List of species.
+    '''
     species = None
     with open(spc_file,'r') as f:
         lines = f.readlines()
@@ -29,8 +53,21 @@ def read_spc(spc_file):
     species = [s for s in species if s and s[0]!='#' and s not in background_spc]
     return(species)
 
-# Get initial values for species and temperature
+
 def read_def(def_file):
+    '''Read .def file and get initial values for species and temperature
+    Parameters
+    ----------
+    def_file: .def file
+        The .def file to read
+    
+    Returns
+    ----------
+    init_values_dict: dict
+        A dictionary storing some initial values.
+    TEMP: float
+        Temperature value
+    '''
     import re
     init_values = None
     TEMP = None
