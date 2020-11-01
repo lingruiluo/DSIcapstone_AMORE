@@ -8,15 +8,17 @@
 - **read_input.py**   - read in spc, def, eqn files
   - read_eqns(eqn_file): return a list of equations  
   - read_spc(spc_file): return a list of species  
-  - read_def(def_file): return a initial values dictionary and temperature  
+  - read_def(def_file): return a initial values dictionary (including CFACTOR, ALL_SPECIES, etc.) and temperature (TEMP)  
 - **calculations.py** 
   - calculate_weight(eqn, init_values): return weight dict  
+    - Assumptions of other initial values not provided in the def_file: SUN = 1 (The sun is presented when the reactions take place)
   - calculate_all_weights(eqns, init_values): return a weight dict of a list of equations
   - calculate_r (further discussion might be needed)
   - calculate_all_r: return a r_AB dict (further discussion might be needed)
 - **isoprene_rates.py** - functions used for function calculate_weight in calculations.py
   - TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
   - Other supplemental math functions
+  - Initial values of CFACTOR and TEMP are needed from the def_file
 - **directed_graph.py**  
   - **TODO: DFS**
   - **TODO: find_dependent_set**
