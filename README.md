@@ -19,9 +19,10 @@
   - TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
   - Other supplemental math functions
   - Initial values of CFACTOR and TEMP are needed from the def_file
-- **directed_graph.py**  
-  - **TODO: DFS**
-  - **TODO: find_dependent_set**
+- **chem_graph.py**  
+  - **this file is a class file**
+  - dfs: Depth-First Search Non-Recursive Function
+  - get_dependent_set: Get the dependent set given the starting set
 - **requirements.txt**
   - pip install -r requirements.txt
 
