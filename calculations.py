@@ -91,7 +91,7 @@ def calculate_all_weights(eqns, inits):
         inner_dict = defaultdict(dict)
         for product in products:
             reactants = [i for i in weight_dict[product]]
-            inner_dict_key = tuple([i] + reactants)
+            inner_dict_key = (i, tuple(reactants))
             for reactant in reactants:
                 inner_dict[reactant] = weight_dict[product][reactant]
             all_weight_dict[product][inner_dict_key] = inner_dict
