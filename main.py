@@ -7,7 +7,9 @@ equations = read_eqns(eqn_file)
 species = read_spc(spc_file)
 inits = read_def(def_file)
 
-from calculations import calculate_weight
-for eqn in equations:
-    weights = calculate_weight(eqn, inits) # a weight_dict for a single equation
-    print(weights)
+from calculations import calculate_weight, calculate_all_weights
+# for eqn in equations:
+#     weights = calculate_weight(eqn, inits) # a weight_dict for a single equation
+#     print(weights)
+all_weights_dict = calculate_all_weights(equations, inits)
+print(all_weights_dict)

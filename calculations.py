@@ -69,7 +69,7 @@ def calculate_weight(eqn, inits):
     return weight_dict  
 
 
-def calculate_allweight(eqns, inits):
+def calculate_all_weights(eqns, inits):
     '''Calculate all weights for the input
     Parameters
     ----------
@@ -80,73 +80,85 @@ def calculate_allweight(eqns, inits):
     
     Returns
     ----------
-    weight_dict: dict
+    all_weight_dict: dict
         A dictionary storing the weights
     '''
-    
-    # import files
-    import numpy as np
-    from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
-    from read_input import background_spc
-    import re
     from collections import defaultdict
-    weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
-    index = 0
-    for eqn in eqns:    
-        find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
-        initial_values_dict, TEMP = inits
-        CFACTOR = float(initial_values_dict['CFACTOR'])
-        reaction, k = eqn
-        reactants = reaction.split(' = ')[0].split(' + ') # get reactants
-        reactants = [i.strip() for i in reactants] 
-        products = reaction.split(' = ')[1].split(' + ') # get products
-        products = [i.strip() for i in products]
+    all_weight_dict = defaultdict(dict)
+    for i in range(len(eqns)):
+        weight_dict = calculate_weight(eqns[i],inits)
+        products = [i for i in weight_dict.keys()]
+        inner_dict = defaultdict(dict)
+        for product in products:
+            reactants = [i for i in weight_dict[product]]
+            inner_dict_key = tuple([i] + reactants)
+            for reactant in reactants:
+                inner_dict[reactant] = weight_dict[product][reactant]
+            all_weight_dict[product][inner_dict_key] = inner_dict
+    return all_weight_dict
+    # import files
+    # import numpy as np
+    # from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
+    # from read_input import background_spc
+    # import re
+    # from collections import defaultdict
+    # weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
+    # index = 0
+    # for eqn in eqns:    
+    #     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
+    #     initial_values_dict, TEMP = inits
+    #     CFACTOR = float(initial_values_dict['CFACTOR'])
+    #     reaction, k = eqn
+    #     reactants = reaction.split(' = ')[0].split(' + ') # get reactants
+    #     reactants = [i.strip() for i in reactants] 
+    #     products = reaction.split(' = ')[1].split(' + ') # get products
+    #     products = [i.strip() for i in products]
 
-        # get reactants mole values
-        reactants_mole = [float(i[:find_alpha_index(i)]) 
-                if find_alpha_index(i)!=0 else 1 for i in reactants] # no idea of how to use this
-        # get reactant species name 
-        reactants_spc = [i[find_alpha_index(i):] for i in reactants]
-        # get products mole values
-        products_mole = [float(i[:find_alpha_index(i)]) 
-                if find_alpha_index(i)!=0 else 1 for i in products]
-        # get products species name 
-        products_spc = [i[find_alpha_index(i):] for i in products]
+    #     # get reactants mole values
+    #     reactants_mole = [float(i[:find_alpha_index(i)]) 
+    #             if find_alpha_index(i)!=0 else 1 for i in reactants] # no idea of how to use this
+    #     # get reactant species name 
+    #     reactants_spc = [i[find_alpha_index(i):] for i in reactants]
+    #     # get products mole values
+    #     products_mole = [float(i[:find_alpha_index(i)]) 
+    #             if find_alpha_index(i)!=0 else 1 for i in products]
+    #     # get products species name 
+    #     products_spc = [i[find_alpha_index(i):] for i in products]
 
-        # v = 1 # assume the stoichiometric coefficient is 1 (might need to fix)
-        SUN = 1 # random initial value for sun; need to fix !
-        funs_temp_cf = ['ALK', 'NIT','TROE','FALL','EPO'] 
-        funs_temp = ['TUN','ISO1','ISO2']
-        funs_cf = ['KCO']
-        if any([k for i in funs_temp_cf if i in k]):
-            k = k[:-1] + ', TEMP, CFACTOR)'
-        if any([k for i in funs_temp if i in k]):
-            k = k[:-1] + ', TEMP)'
-        if any([k for i in funs_cf if i in k]):
-            k = k[:-1] + ', CFACTOR)'
-        k_val = round(eval(k), 4)
-        ls_concentration = []
-        for i in reactants:
-            if i in initial_values_dict.keys():
-                ls_concentration.append(initial_values_dict[i])
-            else:
-                ls_concentration.append(initial_values_dict['ALL_SPEC'])
-        weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
-        for product, mole in zip(products_spc,products_mole):
-            weight = mole * k_val * np.prod(ls_concentration)
-            for reactant in reactants_spc:
-                if reactant not in background_spc and product not in background_spc:
-                    tup = tuple([index,reactant])
-                    index+=1
-                    kk = defaultdict(dict)
-                    kk[tup][reactant] = weight
+    #     # v = 1 # assume the stoichiometric coefficient is 1 (might need to fix)
+    #     SUN = 1 # random initial value for sun; need to fix !
+    #     funs_temp_cf = ['ALK', 'NIT','TROE','FALL','EPO'] 
+    #     funs_temp = ['TUN','ISO1','ISO2']
+    #     funs_cf = ['KCO']
+    #     if any([k for i in funs_temp_cf if i in k]):
+    #         k = k[:-1] + ', TEMP, CFACTOR)'
+    #     if any([k for i in funs_temp if i in k]):
+    #         k = k[:-1] + ', TEMP)'
+    #     if any([k for i in funs_cf if i in k]):
+    #         k = k[:-1] + ', CFACTOR)'
+    #     k_val = round(eval(k), 4)
+    #     ls_concentration = []
+    #     for i in reactants:
+    #         if i in initial_values_dict.keys():
+    #             ls_concentration.append(initial_values_dict[i])
+    #         else:
+    #             ls_concentration.append(initial_values_dict['ALL_SPEC'])
+    #     weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
+    #     for product, mole in zip(products_spc,products_mole):
+    #         weight = mole * k_val * np.prod(ls_concentration)
+    #         for reactant in reactants_spc:
+    #             if reactant not in background_spc and product not in background_spc:
+    #                 tup = tuple([index,reactant])
+    #                 index+=1
+    #                 kk = defaultdict(dict)
+    #                 kk[tup][reactant] = weight
                         
-                    if product in weight_dict.keys():
-                        weight_dict[product].update(kk) 
-                    else:
-                        weight_dict[product] = kk
-        # return(weight)
-    return weight_dict 
+    #                 if product in weight_dict.keys():
+    #                     weight_dict[product].update(kk) 
+    #                 else:
+    #                     weight_dict[product] = kk
+    #     # return(weight)
+    # return weight_dict 
 
 
 """
