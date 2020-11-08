@@ -213,12 +213,12 @@ def calculate_all_weights(eqns, inits):
 def get_weight(eqns, idx, all_weights_dict, reactant_spc):
     eqn = eqns[idx]
     products = get_products(eqn)
-    if len(products) == 1:
-        products = products[0]
-    for key in list(all_weights_dict[products].keys()):
-        if idx in key: 
-            return(all_weights_dict[products][key][reactant_spc])
-    return(None)
+    all_weight = 0.0
+    for i in products:   ## maybe contains mutiple products, all weights from all products
+        for key in list(all_weights_dict[i].keys()):
+            if idx in key: 
+                all_weight+=all_weights_dict[i][key][reactant_spc]
+    return(all_weight)
 
 """
 species_a: product str (main species)
