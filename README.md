@@ -21,6 +21,8 @@
   - Initial values of CFACTOR and TEMP are needed from the def_file
 - **chem_graph.py**  
   - **this file is a class file**
+  - init: give dictionary of r_AB dict
+  - construct_graph: given epsilon, construct the directed graph
   - dfs: Depth-First Search Non-Recursive Function
   - get_dependent_set: Get the dependent set given the starting set
 - **requirements.txt**
