@@ -33,19 +33,21 @@ arguments might need to be changed in this function, because we have the a weigh
 Define calculate_r(v_a vector, w vector, d_b vector):  
 
 CLASS 2 - *directed_graph.py*  
-FUNCTION 1  
-Define get_nodes(all r_AB, threshold epsilon):    
-Use the threshold epsilon and compare it with each of the r_AB (direct influence) to get a subset of nodes that are valid and important.  
+
+###  Maybe duplicate with the FUNCTION3 
+#FUNCTION 1  
+#Define get_nodes(all r_AB, threshold epsilon):    
+#Use the threshold epsilon and compare it with each of the r_AB (direct influence) to get a subset of nodes that are valid and important.  
 Return (node set (A, B, etc))  
 
-FUNCTION 2  
-Define get_edges(all r_AB, threshold epsilon)    
-Use the threshold epsilon and compare it with each of the r_AB (direct influence) to get a subset of edges for DRG construction.  
-Return (edge set (A -> B))  
+#FUNCTION 2  
+#Define get_edges(all r_AB, threshold epsilon)    
+#Use the threshold epsilon and compare it with each of the r_AB (direct influence) to get a subset of edges for DRG construction.  
+#Return (edge set (A -> B))  
 
 FUNCTION 3
 after getting nodes and edges  
-Define construct_DRG (nodes, edges, threshold epsilon):  
+Define construct_DRG (calculate_r_ab_dict, threshold epsilon):   # outputs from the calculate r_ab
 the DRG can be constructed by the following rules:  
 (1) Each node in DRG is uniquely mapped to a species in the detailed mechanism.  
 (2) There exists a directed edge from A to B if and only if r_AB is larger than or equal to epsilon.  
