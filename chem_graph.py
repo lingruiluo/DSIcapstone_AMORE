@@ -4,6 +4,15 @@ class ChemGraph:
 
     def __init__(self, dict):
         self.dict = dict
+        self.graph = defaultdict(set)
+
+    def construct_graph(selfs, epsilon):
+        for key in self.dict:
+            rec_dict = all_r_ab[key]
+            for rec in rec_dict:
+                r = rec_dict[rec]
+                if r >= epsilon:
+                    self.graph[key].add(rec)
 
     def get_dependent_set(self, starting_set, method='DFS'):
         '''
@@ -37,6 +46,6 @@ class ChemGraph:
             if visited[vertex]:
                 continue
             visited[vertex] = True
-            for neighbor in self.dict[vertex]:
+            for neighbor in self.graph[vertex]:
                 stack.append(neighbor)
         return visited
