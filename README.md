@@ -33,7 +33,7 @@ arguments might need to be changed in this function, because we have the a weigh
 Define calculate_r(v_a vector, w vector, d_b vector):  
 
 CLASS 2 - *directed_graph.py*  
-- FUNCTION 1/2 Maybe duplicate with the FUNCTION 3
+*FUNCTION 1/2 Maybe duplicate with the FUNCTION 3*
 #FUNCTION 1  
 #Define get_nodes(all r_AB, threshold epsilon):    
 #Use the threshold epsilon and compare it with each of the r_AB (direct influence) to get a subset of nodes that are valid and important.  
