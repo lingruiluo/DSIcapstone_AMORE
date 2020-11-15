@@ -2,13 +2,13 @@ from collections import defaultdict
 
 class ChemGraph:
 
-    def __init__(self, dict):
-        self.dict = dict
+    def __init__(self, all_r_ab):
+        self.dict = all_r_ab
         self.graph = defaultdict(set)
 
-    def construct_graph(selfs, epsilon):
+    def construct_graph(self, epsilon):
         for key in self.dict:
-            rec_dict = all_r_ab[key]
+            rec_dict = self.dict[key]
             for rec in rec_dict:
                 r = rec_dict[rec]
                 if r >= epsilon:

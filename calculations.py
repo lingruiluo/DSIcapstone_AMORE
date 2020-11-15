@@ -5,6 +5,17 @@ from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL
 from read_input import background_spc
 
 def get_reactants(eqn):
+	'''Get reactants from an equation (ignore background species)
+    Parameters
+    ----------
+    eqn: tuple
+        An equation.
+    
+    Returns
+    ----------
+    reactants_spc: tuple
+        A tuple of reactants in the equation
+    '''
     import re
     from read_input import background_spc
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
@@ -17,6 +28,17 @@ def get_reactants(eqn):
     return(tuple(reactants_spc))
 
 def get_products(eqn):
+	'''Get products from an equation (ignore background species)
+    Parameters
+    ----------
+    eqn: tuple
+        An equation.
+    
+    Returns
+    ----------
+    products_spc: tuple
+        A tuple of products in the equation
+    '''
     import re
     from read_input import background_spc
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
@@ -29,6 +51,17 @@ def get_products(eqn):
     return(tuple(products_spc))
 
 def get_properties(eqns):
+	'''Get reactants and products from equations
+    Parameters
+    ----------
+    eqns: list
+        A List of tuples storing equations
+    
+    Returns
+    ----------
+    ret: dict
+        A dict of dicts storing reactants and products for each equation
+    '''
     from collections import defaultdict
     ret = defaultdict(dict)
     for i in range(0, len(eqns)):
@@ -40,10 +73,26 @@ def get_properties(eqns):
     return(ret)
 
 '''
-if a species is a reactant for the equation, 'p' is marked
-if a species is a product for the equation, 'r' is marked
+if a species is a reactant for the equation, 'r' is marked
+if a species is a product for the equation, 'p' is marked
 '''
 def get_eqns_involve_species(species, eqns):
+	'''Get equations involving specified sepcies. 
+	If a species is a reactant for the equation, 'r' is marked;
+	if a species is a product for the equation, 'p' is marked.
+
+    Parameters
+    ----------
+    species: str
+        Species
+    eqns: list
+        A List of tuples storing equations
+    
+    Returns
+    ----------
+    eqns_idx: list
+        A list of tuples storing indicators of reactants or products and index of equations.
+    '''
     eqns_idx = []
     properties_dict = get_properties(eqns)
     for i in range(0, len(eqns)):
@@ -170,17 +219,18 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
     numerator_eqn_list = a_idx and b_idx # eqns that species a and species b both involve in
     if len(numerator_eqn_list) == 0:
         return('There is no reaction to produce ' + species_a + ' from ' + species_b + '.')
+
     numerator = 0.0
     for i in numerator_eqn_list:
-        for (species_type, eqn_idx) in a_eqns:
-            if eqn_idx == i and species_type == 'p':
-                for t in all_weights_dict[species_a].keys():
-                    idx = t[0] # first position is the eqn_idx
-                    if idx == eqn_idx:
-                        reactants = list(t[1])
-                        value = list(all_weights_dict[species_a][t].values())
-                        value = [abs(v) for v in value]
-                        numerator += abs(sum(value))
+        a_prod_eqns = [x for x in a_eqns if (x[0] == 'p') and (x[1] == i)]
+        for (species_type, eqn_idx) in a_prod_eqns:
+            for t in all_weights_dict[species_a].keys():
+                idx = t[0] # first position is the eqn_idx
+                if idx == eqn_idx:
+                    reactants = list(t[1])
+                    value = list(all_weights_dict[species_a][t].values())
+                    value = [abs(v) for v in value]
+                    numerator += abs(sum(value))
     
     denominator = 0.0
     # species_a as products
