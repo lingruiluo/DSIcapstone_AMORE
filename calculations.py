@@ -219,17 +219,18 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
     numerator_eqn_list = a_idx and b_idx # eqns that species a and species b both involve in
     if len(numerator_eqn_list) == 0:
         return('There is no reaction to produce ' + species_a + ' from ' + species_b + '.')
+
     numerator = 0.0
     for i in numerator_eqn_list:
-        for (species_type, eqn_idx) in a_eqns:
-            if eqn_idx == i and species_type == 'p':
-                for t in all_weights_dict[species_a].keys():
-                    idx = t[0] # first position is the eqn_idx
-                    if idx == eqn_idx:
-                        reactants = list(t[1])
-                        value = list(all_weights_dict[species_a][t].values())
-                        value = [abs(v) for v in value]
-                        numerator += abs(sum(value))
+        a_prod_eqns = [x for x in a_eqns if (x[0] == 'p') and (x[1] == i)]
+        for (species_type, eqn_idx) in a_prod_eqns:
+            for t in all_weights_dict[species_a].keys():
+                idx = t[0] # first position is the eqn_idx
+                if idx == eqn_idx:
+                    reactants = list(t[1])
+                    value = list(all_weights_dict[species_a][t].values())
+                    value = [abs(v) for v in value]
+                    numerator += abs(sum(value))
     
     denominator = 0.0
     # species_a as products
