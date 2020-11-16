@@ -5,7 +5,8 @@ from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL
 from read_input import background_spc
 
 def get_reactants(eqn):
-	'''Get reactants from an equation (ignore background species)
+    '''
+    Get reactants from an equation (ignore background species)
     Parameters
     ----------
     eqn: tuple
@@ -26,7 +27,8 @@ def get_reactants(eqn):
     return(tuple(reactants_spc))
 
 def get_products(eqn):
-	'''Get products from an equation (ignore background species)
+    '''
+    Get products from an equation (ignore background species)
     Parameters
     ----------
     eqn: tuple
@@ -47,7 +49,8 @@ def get_products(eqn):
     return(tuple(products_spc))
 
 def get_properties(eqns):
-	'''Get reactants and products from equations
+    '''
+    Get reactants and products from equations
     Parameters
     ----------
     eqns: list
@@ -67,14 +70,15 @@ def get_properties(eqns):
         ret[i]['products'] = products
     return(ret)
 
-'''
-if a species is a reactant for the equation, 'r' is marked
-if a species is a product for the equation, 'p' is marked
-'''
+# '''
+# if a species is a reactant for the equation, 'r' is marked
+# if a species is a product for the equation, 'p' is marked
+# '''
 def get_eqns_involve_species(species, eqns):
-	'''Get equations involving specified sepcies. 
-	If a species is a reactant for the equation, 'r' is marked;
-	if a species is a product for the equation, 'p' is marked.
+    '''
+    Get equations involving specified sepcies. 
+    If a species is a reactant for the equation, 'r' is marked;
+    if a species is a product for the equation, 'p' is marked.
 
     Parameters
     ----------
@@ -163,7 +167,8 @@ def calculate_weight(eqn, inits):
 
 
 def calculate_all_weights(eqns, inits):
-    '''Calculate all weights for the input
+    '''
+    Calculate all weights for the input
     Parameters
     ----------
     eql: tuple
@@ -200,11 +205,11 @@ def get_weight(eqns, idx, all_weights_dict, reactant_spc):
                 all_weight+=all_weights_dict[i][key][reactant_spc]
     return(all_weight)
 
-"""
-species_a: product str (main species)
-species_b: reactant str
-weight_dict: a dictionary from calculate_allweight function
-"""
+# """
+# species_a: product str (main species)
+# species_b: reactant str
+# weight_dict: a dictionary from calculate_allweight function
+# """
 def calculate_r(species_a, species_b, all_weights_dict, eqns):
     a_eqns = get_eqns_involve_species(species_a, eqns)
     b_eqns = get_eqns_involve_species(species_b, eqns)
@@ -242,7 +247,7 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
         return(0)
     else:
         return(numerator/denominator)
- 
+
 
 def calculate_all_r(all_weights_dict, eqns):
     products_list = list(all_weights_dict.keys())
