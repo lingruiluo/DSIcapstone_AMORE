@@ -5,9 +5,19 @@ from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL
 from read_input import background_spc
 
 def get_reactants(eqn):
-    import re
-    from read_input import background_spc
-    find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
+    '''
+    Get reactants from an equation (ignore background species)
+    Parameters
+    ----------
+    eqn: tuple
+        An equation.
+    
+    Returns
+    ----------
+    reactants_spc: tuple
+        A tuple of reactants in the equation
+    '''
+    find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start()
     reaction, k = eqn
     reactants = reaction.split(' = ')[0].split(' + ') # get reactants
     reactants = [i.strip() for i in reactants]
@@ -17,8 +27,18 @@ def get_reactants(eqn):
     return(tuple(reactants_spc))
 
 def get_products(eqn):
-    import re
-    from read_input import background_spc
+    '''
+    Get products from an equation (ignore background species)
+    Parameters
+    ----------
+    eqn: tuple
+        An equation.
+    
+    Returns
+    ----------
+    products_spc: tuple
+        A tuple of products in the equation
+    '''
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
     reaction, k = eqn
     products = reaction.split(' = ')[1].split(' + ') # get products
@@ -29,7 +49,18 @@ def get_products(eqn):
     return(tuple(products_spc))
 
 def get_properties(eqns):
-    from collections import defaultdict
+    '''
+    Get reactants and products from equations
+    Parameters
+    ----------
+    eqns: list
+        A List of tuples storing equations
+    
+    Returns
+    ----------
+    ret: dict
+        A dict of dicts storing reactants and products for each equation
+    '''
     ret = defaultdict(dict)
     for i in range(0, len(eqns)):
         eqn = eqns[i]
@@ -39,11 +70,28 @@ def get_properties(eqns):
         ret[i]['products'] = products
     return(ret)
 
-'''
-if a species is a reactant for the equation, 'p' is marked
-if a species is a product for the equation, 'r' is marked
-'''
+# '''
+# if a species is a reactant for the equation, 'r' is marked
+# if a species is a product for the equation, 'p' is marked
+# '''
 def get_eqns_involve_species(species, eqns):
+    '''
+    Get equations involving specified sepcies. 
+    If a species is a reactant for the equation, 'r' is marked;
+    if a species is a product for the equation, 'p' is marked.
+
+    Parameters
+    ----------
+    species: str
+        Species
+    eqns: list
+        A List of tuples storing equations
+    
+    Returns
+    ----------
+    eqns_idx: list
+        A list of tuples storing indicators of reactants or products and index of equations.
+    '''
     eqns_idx = []
     properties_dict = get_properties(eqns)
     for i in range(0, len(eqns)):
@@ -119,7 +167,8 @@ def calculate_weight(eqn, inits):
 
 
 def calculate_all_weights(eqns, inits):
-    '''Calculate all weights for the input
+    '''
+    Calculate all weights for the input
     Parameters
     ----------
     eql: tuple
@@ -132,7 +181,6 @@ def calculate_all_weights(eqns, inits):
     all_weight_dict: dict
         A dictionary storing the weights
     '''
-    from collections import defaultdict
     all_weight_dict = defaultdict(dict)
     for i in range(len(eqns)):
         weight_dict = calculate_weight(eqns[i],inits)
@@ -145,69 +193,6 @@ def calculate_all_weights(eqns, inits):
                 inner_dict[reactant] = weight_dict[product][reactant]
             all_weight_dict[product][inner_dict_key] = inner_dict
     return all_weight_dict
-    # import files
-    # import numpy as np
-    # from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
-    # from read_input import background_spc
-    # import re
-    # from collections import defaultdict
-    # weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
-    # index = 0
-    # for eqn in eqns:    
-    #     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
-    #     initial_values_dict, TEMP = inits
-    #     CFACTOR = float(initial_values_dict['CFACTOR'])
-    #     reaction, k = eqn
-    #     reactants = reaction.split(' = ')[0].split(' + ') # get reactants
-    #     reactants = [i.strip() for i in reactants] 
-    #     products = reaction.split(' = ')[1].split(' + ') # get products
-    #     products = [i.strip() for i in products]
-
-    #     # get reactants mole values
-    #     reactants_mole = [float(i[:find_alpha_index(i)]) 
-    #             if find_alpha_index(i)!=0 else 1 for i in reactants] # no idea of how to use this
-    #     # get reactant species name 
-    #     reactants_spc = [i[find_alpha_index(i):] for i in reactants]
-    #     # get products mole values
-    #     products_mole = [float(i[:find_alpha_index(i)]) 
-    #             if find_alpha_index(i)!=0 else 1 for i in products]
-    #     # get products species name 
-    #     products_spc = [i[find_alpha_index(i):] for i in products]
-
-    #     # v = 1 # assume the stoichiometric coefficient is 1 (might need to fix)
-    #     SUN = 1 # random initial value for sun; need to fix !
-    #     funs_temp_cf = ['ALK', 'NIT','TROE','FALL','EPO'] 
-    #     funs_temp = ['TUN','ISO1','ISO2']
-    #     funs_cf = ['KCO']
-    #     if any([k for i in funs_temp_cf if i in k]):
-    #         k = k[:-1] + ', TEMP, CFACTOR)'
-    #     if any([k for i in funs_temp if i in k]):
-    #         k = k[:-1] + ', TEMP)'
-    #     if any([k for i in funs_cf if i in k]):
-    #         k = k[:-1] + ', CFACTOR)'
-    #     k_val = round(eval(k), 4)
-    #     ls_concentration = []
-    #     for i in reactants:
-    #         if i in initial_values_dict.keys():
-    #             ls_concentration.append(initial_values_dict[i])
-    #         else:
-    #             ls_concentration.append(initial_values_dict['ALL_SPEC'])
-    #     weight_dict = defaultdict(dict) # key: product; value: dict{reactant:weight}
-    #     for product, mole in zip(products_spc,products_mole):
-    #         weight = mole * k_val * np.prod(ls_concentration)
-    #         for reactant in reactants_spc:
-    #             if reactant not in background_spc and product not in background_spc:
-    #                 tup = tuple([index,reactant])
-    #                 index+=1
-    #                 kk = defaultdict(dict)
-    #                 kk[tup][reactant] = weight
-                        
-    #                 if product in weight_dict.keys():
-    #                     weight_dict[product].update(kk) 
-    #                 else:
-    #                     weight_dict[product] = kk
-    #     # return(weight)
-    # return weight_dict 
 
     
 def get_weight(eqns, idx, all_weights_dict, reactant_spc):
@@ -220,11 +205,11 @@ def get_weight(eqns, idx, all_weights_dict, reactant_spc):
                 all_weight+=all_weights_dict[i][key][reactant_spc]
     return(all_weight)
 
-"""
-species_a: product str (main species)
-species_b: reactant str
-weight_dict: a dictionary from calculate_allweight function
-"""
+# """
+# species_a: product str (main species)
+# species_b: reactant str
+# weight_dict: a dictionary from calculate_allweight function
+# """
 def calculate_r(species_a, species_b, all_weights_dict, eqns):
     a_eqns = get_eqns_involve_species(species_a, eqns)
     b_eqns = get_eqns_involve_species(species_b, eqns)
@@ -233,17 +218,18 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
     numerator_eqn_list = a_idx and b_idx # eqns that species a and species b both involve in
     if len(numerator_eqn_list) == 0:
         return('There is no reaction to produce ' + species_a + ' from ' + species_b + '.')
+
     numerator = 0.0
     for i in numerator_eqn_list:
-        for (species_type, eqn_idx) in a_eqns:
-            if eqn_idx == i and species_type == 'p':
-                for t in all_weights_dict[species_a].keys():
-                    idx = t[0] # first position is the eqn_idx
-                    if idx == eqn_idx:
-                        reactants = list(t[1])
-                        value = list(all_weights_dict[species_a][t].values())
-                        value = [abs(v) for v in value]
-                        numerator += abs(sum(value))
+        a_prod_eqns = [x for x in a_eqns if (x[0] == 'p') and (x[1] == i)]
+        for (species_type, eqn_idx) in a_prod_eqns:
+            for t in all_weights_dict[species_a].keys():
+                idx = t[0] # first position is the eqn_idx
+                if idx == eqn_idx:
+                    reactants = list(t[1])
+                    value = list(all_weights_dict[species_a][t].values())
+                    value = [abs(v) for v in value]
+                    numerator += abs(sum(value))
     
     denominator = 0.0
     # species_a as products
@@ -261,10 +247,9 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
         return(0)
     else:
         return(numerator/denominator)
- 
+
 
 def calculate_all_r(all_weights_dict, eqns):
-    from collections import defaultdict
     products_list = list(all_weights_dict.keys())
     rAB_dict = defaultdict(dict)
     for product in products_list:

@@ -7,9 +7,17 @@ equations = read_eqns(eqn_file)
 species = read_spc(spc_file)
 inits = read_def(def_file)
 
-from calculations import calculate_weight, calculate_all_weights
+from calculations import calculate_weight, calculate_all_weights, calculate_all_r
+from direct_graph import construct_graph
 # for eqn in equations:
 #     weights = calculate_weight(eqn, inits) # a weight_dict for a single equation
 #     print(weights)
 all_weights_dict = calculate_all_weights(equations, inits)
-print(all_weights_dict)
+all_r = calculate_all_r(all_weights_dict, equations)
+print(all_r)
+nodes, edges, graph = construct_graph(all_r, 0.001)
+print("nodes: ", nodes)
+print("size of nodes", len(nodes))
+print("edges: ", edges)
+print("size of edges", len(edges))
+print("graph: ", graph)
