@@ -16,9 +16,7 @@ def get_reactants(eqn):
     reactants_spc: tuple
         A tuple of reactants in the equation
     '''
-    import re
-    from read_input import background_spc
-    find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
+    find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start()
     reaction, k = eqn
     reactants = reaction.split(' = ')[0].split(' + ') # get reactants
     reactants = [i.strip() for i in reactants]
@@ -39,8 +37,6 @@ def get_products(eqn):
     products_spc: tuple
         A tuple of products in the equation
     '''
-    import re
-    from read_input import background_spc
     find_alpha_index = lambda x:re.search(r'[a-z]', x, re.I).start() # helper function
     reaction, k = eqn
     products = reaction.split(' = ')[1].split(' + ') # get products
@@ -62,7 +58,6 @@ def get_properties(eqns):
     ret: dict
         A dict of dicts storing reactants and products for each equation
     '''
-    from collections import defaultdict
     ret = defaultdict(dict)
     for i in range(0, len(eqns)):
         eqn = eqns[i]
@@ -181,7 +176,6 @@ def calculate_all_weights(eqns, inits):
     all_weight_dict: dict
         A dictionary storing the weights
     '''
-    from collections import defaultdict
     all_weight_dict = defaultdict(dict)
     for i in range(len(eqns)):
         weight_dict = calculate_weight(eqns[i],inits)
@@ -251,7 +245,6 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
  
 
 def calculate_all_r(all_weights_dict, eqns):
-    from collections import defaultdict
     products_list = list(all_weights_dict.keys())
     rAB_dict = defaultdict(dict)
     for product in products_list:
