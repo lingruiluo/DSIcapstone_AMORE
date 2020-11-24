@@ -121,8 +121,6 @@ def calculate_weight(eqn, inits):
     initial_values_dict, TEMP = inits
     CFACTOR = float(initial_values_dict['CFACTOR'])
     reaction, k = eqn
-    if reaction == 'PAN = CH3CO3 + NO2':
-        k = '1.95E+16*EXP(-13543/TEMP)'
     reactants = reaction.split(' = ')[0].split(' + ') # get reactants
     reactants = [i.strip() for i in reactants] 
     products = reaction.split(' = ')[1].split(' + ') # get products
@@ -142,7 +140,7 @@ def calculate_weight(eqn, inits):
     # v = 1 # assume the stoichiometric coefficient is 1 (might need to fix)
     SUN = 1 # random initial value for sun; need to fix !
     funs_temp_cf = ['ALK', 'NIT','TROE','FALL','EPO'] 
-    funs_temp = ['TUN','ISO1','ISO2']
+    funs_temp = ['TUN','ISO1','ISO2','ARR']
     funs_cf = ['KCO']
     if any([k for i in funs_temp_cf if i in k]):
         k = k[:-1] + ', TEMP, CFACTOR)'

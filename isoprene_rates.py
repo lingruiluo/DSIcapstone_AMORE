@@ -169,15 +169,14 @@ KPP_REAL FUNCTION TROE ( A0,B0,C0,A1,B1,C1,CF)
 END FUNCTION TROE
 '''
 def TROE(A0, B0, C0, A1, B1, C1, CF, TEMP, CFACTOR):
-    K0 = A0 * EXP(B0/TEMP) * (TEMP/300) * C0
-    K1 = A1 * EXP(B1/TEMP) * (TEMP/300) * C1
+    K0 = A0 * EXP(B0/TEMP) * (TEMP/300) ** C0
+    K1 = A1 * EXP(B1/TEMP) * (TEMP/300) ** C1
     K0 = K0 * CFACTOR
     KR = K0/K1
     NC = 0.75 - 1.27 * LOG10(CF)
     F = 10 ** ((LOG10(CF)) / (1+(LOG10(KR)/NC)**2))
     TROE = K0*K1*F / (K0+K1)
-    # TROE = 1.95e16*EXP(-13543/TEMP)
     return TROE
 
-def ARR(*args):
-    return 10E-11
+def ARR(A0, B0, C0, TEMP):
+    return(A0 * EXP(B0/TEMP) * EXP(C0/TEMP**3))
