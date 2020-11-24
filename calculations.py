@@ -1,7 +1,7 @@
 import numpy as np
 import re
 from collections import defaultdict
-from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
+from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE, ARR
 from read_input import background_spc
 
 def get_reactants(eqn):
@@ -121,6 +121,8 @@ def calculate_weight(eqn, inits):
     initial_values_dict, TEMP = inits
     CFACTOR = float(initial_values_dict['CFACTOR'])
     reaction, k = eqn
+    if reaction == 'PAN = CH3CO3 + NO2':
+        k = '1.95E+16*EXP(-13543/TEMP)'
     reactants = reaction.split(' = ')[0].split(' + ') # get reactants
     reactants = [i.strip() for i in reactants] 
     products = reaction.split(' = ')[1].split(' + ') # get products

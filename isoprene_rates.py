@@ -176,4 +176,8 @@ def TROE(A0, B0, C0, A1, B1, C1, CF, TEMP, CFACTOR):
     NC = 0.75 - 1.27 * LOG10(CF)
     F = 10 ** ((LOG10(CF)) / (1+(LOG10(KR)/NC)**2))
     TROE = K0*K1*F / (K0+K1)
+    # TROE = 1.95e16*EXP(-13543/TEMP)
     return TROE
+
+def ARR(*args):
+    return 10E-11
