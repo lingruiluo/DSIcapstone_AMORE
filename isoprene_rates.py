@@ -103,7 +103,7 @@ def ISO2(A0, B0, C0, D0, E0, F0, G0, TEMP):
     K0 = D0 * EXP(E0/TEMP) * EXP(1.E8/TEMP**3)
     K1 = F0 * EXP(G0/TEMP)
     K2 = C0 * K0/(K0+K1)
-    ISO1 = A0 * EXP(B0/TEMP) * K2
+    ISO2 = A0 * EXP(B0/TEMP) * K2
     return ISO2
 
 

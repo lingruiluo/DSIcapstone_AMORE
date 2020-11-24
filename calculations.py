@@ -148,6 +148,8 @@ def calculate_weight(eqn, inits):
         k = k[:-1] + ', TEMP)'
     if any([k for i in funs_cf if i in k]):
         k = k[:-1] + ', CFACTOR)'
+    if 'D' in k:
+        k = k.replace('D','E')
     k_val = round(eval(k), 4)
     ls_concentration = []
     for i in reactants:
