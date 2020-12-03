@@ -2,7 +2,7 @@ from collections import defaultdict
 import operator
 from graphviz import Digraph
 
-def dfs(graph, start, visited=None):
+def dfs(graph, start, visited=None, reduced_graph=None):
     '''
     Depth-First Search Non-Recursive Function
     :param graph: dictionary 
@@ -15,43 +15,49 @@ def dfs(graph, start, visited=None):
     if visited[start]:
         return visited
     stack = [start]
+
+    if reduced_graph == None:
+        reduced_graph = defaultdict(lambda : set())
     while stack:
         vertex = stack.pop()
         if visited[vertex]:
             continue
         visited[vertex] = True
-        for neighbor in graph[vertex]:
+        for s in graph[vertex]:
+            neighbor = s[0]
+            r = s[1]
+            reduced_graph[vertex].add([neighbor, r])
             if not visited[neighbor]:
                 stack.append(neighbor)
-    return visited
+    return visited, reduced_graph
 
-def get_dependent_set(graph, starting_set, method='DFS'):
-    '''
-    Get the dependent set given the starting set
-    :param graph: 
-    :param starting_set: list like object containing species
-    :param method: searching algorithm. Default is depth-first search
-    :return: a list of species
-    '''
-    if method == 'DFS':
-        visited = defaultdict(lambda: False)
-        for specie in starting_set:
-            visited = dfs(graph, specie, visited)
-        return list(visited.keys())
-    else:
-        raise Exception('method not implemented')
 
-def visualize_graph(graph, name='Example'):
+def visualize_graph(graph, node_to_mark=None, name='Example'):
     g = Digraph(comment=name, format='png')
+    if node_to_mark:
+        g.attr('node', shape='doublecircle', style='filled', fillcolor='red')
+        for n in node_to_mark:
+            g.node(n)
+    
+    g.attr('node', shape='ellipse', fillcolor='white')
     for item in graph.items():
-        for rec in item[1]:
-            g.edge(item[0], rec)
+        g.node(item[0])
+        for s in item[1]:
+            g.node(s[0])
+    
+    for item in graph.items():
+        g.node(item[0])
+        for s in item[1]:
+            g.edge(item[0], s[0])
+
     return g
 
 class ChemGraph:
 
-    def __init__(self, dict_all_r_ab):
+    def __init__(self, dict_all_r_ab, starting_set, must_contain=None):
         self.dict = dict_all_r_ab
+        self.starting_set = starting_set
+        self.must_contain = must_contain
 
     def get_skeleton_graph(self, epsilon):
         graph = defaultdict(set)
@@ -59,8 +65,11 @@ class ChemGraph:
             rec_dict = self.dict[key]
             for rec in rec_dict.keys():
                 r = rec_dict[rec]
+                if rec in self.must_contain:
+                    graph[key].add((rec, r))
+                    continue
                 if r >= epsilon:
-                    graph[key].add(rec)
+                    graph[key].add((rec, r))
         return graph
 
     def get_all_skeleton_graph(self, epsilons, method='naive'):
@@ -88,3 +97,11 @@ class ChemGraph:
             return ret_dict
         else:
             raise Exception('method not implemented')
+
+    def get_dependent_set(self, epsilon):
+        skeleton_graph = self.get_skeleton_graph(epsilon)
+        graph = skeleton_graph
+        visited = defaultdict(lambda: False)
+        for specie in self.starting_set:
+            visited, reduced_graph = dfs(graph, specie, visited)
+        return list(visited.keys()), reduced_graph
