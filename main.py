@@ -31,7 +31,10 @@ print("size of edges", len(edges)) # 864
 # print("graph: ", graph)
 
 chem_graph = ChemGraph(all_r)
-epsilons = [0,0.01,0.05,0.1,0.2,0.5]
+epsilons = [0,0.01,0.05,0.1,0.2,0.5] 
+# (864, 382), (184, 198), (173, 197), (169, 195), (165, 193), (135, 175)]
+# epsilons = [0, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 
+#             0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 graphs = chem_graph.get_all_skeleton_graph(epsilons=epsilons)
 def get_edges_nodes(graph):
     edges, nodes = set(), set()
@@ -47,7 +50,13 @@ for eps in epsilons:
     graph = graphs[eps]
     edges, nodes = get_edges_nodes(graph)
     graph_size.append((len(edges),len(nodes)))
-print(graph_size) # (864, 382), (184, 198), (173, 197), (169, 195), (165, 193), (135, 175)]
-
+print(graph_size) 
+# edges_size = []
+# nodes_size = []
+# for i in graph_size:
+#     edges_size.append(i[0])
+#     nodes_size.append(i[1])
+# import matplotlib.pyplot as plt
+# plt.plot(epsilons,nodes_size,'-b.',color='r',label='nodes_size')
 
 
