@@ -152,7 +152,7 @@ def calculate_weight(eqn, inits, SUN=1.0):
         k = k[:-1] + ', CFACTOR)'
     if 'D' in k:
         k = k.replace('D','E')
-    k_val = round(eval(k), 4)
+    k_val = eval(k)
     ls_concentration = []
     for i in reactants:
         if i in initial_values_dict.keys():
