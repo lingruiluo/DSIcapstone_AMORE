@@ -1,21 +1,15 @@
 from read_input import read_eqns, read_spc, read_def, background_spc
+from calculations import calculate_weight, calculate_all_weights, calculate_all_r
+from chem_graph import ChemGraph
+from direct_graph import construct_graph
+
 path = 'isoprene_oxidation_model_v5_190415'
 eqn_file = path+'/isoprene_full_v5.eqn'
 spc_file = path+'/isoprene_full_v5.spc'
 def_file = path+'/isoprene_full_v5.def'
-# eqn_file = path + '/isoprene_reduced_plus_v5.eqn'
-# spc_file = path + '/isoprene_reduced_plus_v5.spc'
-# def_file = path + '/isoprene_reduced_plus_v5.def'
-# eqn_file = path+'/isoprene_mini_v5.eqn'
-# spc_file = path+'/isoprene_mini_v5.spc'
-# def_file = path+'/isoprene_mini_v5.def'
 equations = read_eqns(eqn_file)
 species = read_spc(spc_file)
 inits = read_def(def_file)
-
-from calculations import calculate_weight, calculate_all_weights, calculate_all_r
-from chem_graph import ChemGraph
-from direct_graph import construct_graph
 
 # for eqn in equations:
 #     weights = calculate_weight(eqn, inits) # a weight_dict for a single equation
@@ -30,12 +24,32 @@ print("size of nodes", len(nodes)) # 382
 print("size of edges", len(edges)) # 864
 # print("graph: ", graph)
 
-chem_graph = ChemGraph(all_r)
+
+starting_set = []
+must_contain = None
+chem_graph = ChemGraph(all_r, starting_set, must_contain)
+
+
+## one epsilon
+epsilon = 0.5
+reduced_graph = chem_graph.get_dependent_set(epsilon)
+## skeleton graph, reduced_graph, dependent set will also be stored within the object
+skeleton_graph = chem_graph.skeleton_graph
+reduced_graph = chem_graph.reduced_graph
+dependent_set = chem_graph.dependent_set
+
+
+## multiple epsilons
+## get a dictionary {epsilon:reduced graph}
 epsilons = [0,0.01,0.05,0.1,0.2,0.5] 
-# (864, 382), (184, 198), (173, 197), (169, 195), (165, 193), (135, 175)]
-# epsilons = [0, 0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 
-#             0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-graphs = chem_graph.get_all_skeleton_graph(epsilons=epsilons)
+skeleton_graphs = chem_graph.get_all_skeleton_graph(epsilons)
+reduced_graphs = chem_graph.get_all_reduced_graph(epsilon)
+
+
+
+
+
+
 def get_edges_nodes(graph):
     edges, nodes = set(), set()
     for key in graph:
