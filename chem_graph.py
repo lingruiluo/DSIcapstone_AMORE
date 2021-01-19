@@ -98,10 +98,24 @@ class ChemGraph:
         else:
             raise Exception('method not implemented')
 
-    def get_dependent_set(self, epsilon):
-        skeleton_graph = self.get_skeleton_graph(epsilon)
+    def get_dependent_set(self, epsilon, skeleton_graph=None, update=True):
+        if skeleton_graph == None:
+            skeleton_graph = self.get_skeleton_graph(epsilon)
         graph = skeleton_graph
         visited = defaultdict(lambda: False)
         for specie in self.starting_set:
             visited, reduced_graph = dfs(graph, specie, visited)
-        return list(visited.keys()), reduced_graph
+        if update:
+            self.skeleton_graph = skeleton_graph
+            self.reduced_graph = reduced_graph
+            self.dependent_set = visited
+        return reduced_graph
+    
+    def get_all_reduced_graph(self, epsilons):
+        skeleton_graph_dict = self.get_all_skeleton_graph(epsilons)
+        ret_dict = {}
+        for e in epsilons:
+            sk_graph = skeleton_graph_dict[e]
+            rd_graph = self.get_dependent_set(e, sk_graph, False)
+            ret_dict[e] = rd_graph
+        return ret_dict
