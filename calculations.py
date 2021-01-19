@@ -1,11 +1,12 @@
 import numpy as np
 import re
 from collections import defaultdict
-from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE
+from isoprene_rates import EXP, LOG10, TUN, ALK, NIT, ISO1, ISO2, EPO, KCO, FALL, TROE, ARR
 from read_input import background_spc
 
 def get_reactants(eqn):
-	'''Get reactants from an equation (ignore background species)
+    '''
+    Get reactants from an equation (ignore background species)
     Parameters
     ----------
     eqn: tuple
@@ -26,7 +27,8 @@ def get_reactants(eqn):
     return(tuple(reactants_spc))
 
 def get_products(eqn):
-	'''Get products from an equation (ignore background species)
+    '''
+    Get products from an equation (ignore background species)
     Parameters
     ----------
     eqn: tuple
@@ -47,7 +49,8 @@ def get_products(eqn):
     return(tuple(products_spc))
 
 def get_properties(eqns):
-	'''Get reactants and products from equations
+    '''
+    Get reactants and products from equations
     Parameters
     ----------
     eqns: list
@@ -67,14 +70,15 @@ def get_properties(eqns):
         ret[i]['products'] = products
     return(ret)
 
-'''
-if a species is a reactant for the equation, 'r' is marked
-if a species is a product for the equation, 'p' is marked
-'''
+# '''
+# if a species is a reactant for the equation, 'r' is marked
+# if a species is a product for the equation, 'p' is marked
+# '''
 def get_eqns_involve_species(species, eqns):
-	'''Get equations involving specified sepcies. 
-	If a species is a reactant for the equation, 'r' is marked;
-	if a species is a product for the equation, 'p' is marked.
+    '''
+    Get equations involving specified sepcies. 
+    If a species is a reactant for the equation, 'r' is marked;
+    if a species is a product for the equation, 'p' is marked.
 
     Parameters
     ----------
@@ -98,7 +102,7 @@ def get_eqns_involve_species(species, eqns):
             eqns_idx.append(('r', i))
     return(eqns_idx)
 
-def calculate_weight(eqn, inits):
+def calculate_weight(eqn, inits, SUN=1.0):
     '''Calculate weights for a given equation
     Parameters
     ----------
@@ -106,6 +110,8 @@ def calculate_weight(eqn, inits):
         The first element of the tuple is an equation. The second element is reaction rate.
     inits: dict
         A dictionary storing some initial values
+    SUN: float
+        A value of SUN that can vary along the time; usually 0-1
     
     Returns
     ----------
@@ -134,9 +140,9 @@ def calculate_weight(eqn, inits):
     products_spc = [i[find_alpha_index(i):] for i in products]
 
     # v = 1 # assume the stoichiometric coefficient is 1 (might need to fix)
-    SUN = 1 # random initial value for sun; need to fix !
+    # SUN = 1 
     funs_temp_cf = ['ALK', 'NIT','TROE','FALL','EPO'] 
-    funs_temp = ['TUN','ISO1','ISO2']
+    funs_temp = ['TUN','ISO1','ISO2','ARR']
     funs_cf = ['KCO']
     if any([k for i in funs_temp_cf if i in k]):
         k = k[:-1] + ', TEMP, CFACTOR)'
@@ -144,7 +150,9 @@ def calculate_weight(eqn, inits):
         k = k[:-1] + ', TEMP)'
     if any([k for i in funs_cf if i in k]):
         k = k[:-1] + ', CFACTOR)'
-    k_val = round(eval(k), 4)
+    if 'D' in k:
+        k = k.replace('D','E')
+    k_val = eval(k)
     ls_concentration = []
     for i in reactants:
         if i in initial_values_dict.keys():
@@ -162,14 +170,17 @@ def calculate_weight(eqn, inits):
     return weight_dict  
 
 
-def calculate_all_weights(eqns, inits):
-    '''Calculate all weights for the input
+def calculate_all_weights(eqns, inits, SUN=1.0):
+    '''
+    Calculate all weights for the input
     Parameters
     ----------
     eql: tuple
         The first element of the tuple is an equation. The second element is reaction rate.
     inits: dict
         A dictionary storing some initial values
+    SUN: float
+        A value of SUN that can vary along the time; usually 0-1
     
     Returns
     ----------
@@ -178,7 +189,7 @@ def calculate_all_weights(eqns, inits):
     '''
     all_weight_dict = defaultdict(dict)
     for i in range(len(eqns)):
-        weight_dict = calculate_weight(eqns[i],inits)
+        weight_dict = calculate_weight(eqns[i],inits, SUN=SUN)
         products = [i for i in weight_dict.keys()]
         inner_dict = defaultdict(dict)
         for product in products:
@@ -200,11 +211,11 @@ def get_weight(eqns, idx, all_weights_dict, reactant_spc):
                 all_weight+=all_weights_dict[i][key][reactant_spc]
     return(all_weight)
 
-"""
-species_a: product str (main species)
-species_b: reactant str
-weight_dict: a dictionary from calculate_allweight function
-"""
+# """
+# species_a: product str (main species)
+# species_b: reactant str
+# weight_dict: a dictionary from calculate_allweight function
+# """
 def calculate_r(species_a, species_b, all_weights_dict, eqns):
     a_eqns = get_eqns_involve_species(species_a, eqns)
     b_eqns = get_eqns_involve_species(species_b, eqns)
@@ -242,7 +253,7 @@ def calculate_r(species_a, species_b, all_weights_dict, eqns):
         return(0)
     else:
         return(numerator/denominator)
- 
+
 
 def calculate_all_r(all_weights_dict, eqns):
     products_list = list(all_weights_dict.keys())

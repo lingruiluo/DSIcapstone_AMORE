@@ -103,7 +103,7 @@ def ISO2(A0, B0, C0, D0, E0, F0, G0, TEMP):
     K0 = D0 * EXP(E0/TEMP) * EXP(1.E8/TEMP**3)
     K1 = F0 * EXP(G0/TEMP)
     K2 = C0 * K0/(K0+K1)
-    ISO1 = A0 * EXP(B0/TEMP) * K2
+    ISO2 = A0 * EXP(B0/TEMP) * K2
     return ISO2
 
 
@@ -169,11 +169,14 @@ KPP_REAL FUNCTION TROE ( A0,B0,C0,A1,B1,C1,CF)
 END FUNCTION TROE
 '''
 def TROE(A0, B0, C0, A1, B1, C1, CF, TEMP, CFACTOR):
-    K0 = A0 * EXP(B0/TEMP) * (TEMP/300) * C0
-    K1 = A1 * EXP(B1/TEMP) * (TEMP/300) * C1
+    K0 = A0 * EXP(B0/TEMP) * (TEMP/300) ** C0
+    K1 = A1 * EXP(B1/TEMP) * (TEMP/300) ** C1
     K0 = K0 * CFACTOR
     KR = K0/K1
     NC = 0.75 - 1.27 * LOG10(CF)
     F = 10 ** ((LOG10(CF)) / (1+(LOG10(KR)/NC)**2))
     TROE = K0*K1*F / (K0+K1)
     return TROE
+
+def ARR(A0, B0, C0, TEMP):
+    return(A0 * EXP(B0/TEMP) * EXP(C0/TEMP**3))
